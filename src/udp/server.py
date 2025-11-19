@@ -24,4 +24,4 @@ def init():
         
         UDPServerSocket.sendto(bytesToSend, address)
         
-init()
+#init()

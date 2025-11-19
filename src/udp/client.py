@@ -20,4 +20,4 @@ def init():
     
     UDPClientSocket.close()
     
-init()
+#init()
