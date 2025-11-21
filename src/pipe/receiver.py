@@ -1,26 +1,27 @@
-
 import socket
 import threading
 from xmlrpc import server
-import protocol
+import pipe.protocol as protocol
 
 next_receiver_id = 1
 receivers = {}
 
 class Receiver:
-    def __init__(self):
+    def __init__(self, local_host, local_port):
         self.socket = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
-        self.socket.bind((protocol.LOCAL_HOST, protocol.LOCAL_PORT))
+        self.local = (local_host, local_port)
+        self.socket.bind(self.local)
+        
         self.buffer = bytearray()
         self.lock = threading.Lock()
         self.expect_seq = 0
-        self.running = True
         self.data_available = threading.Condition(self.lock)
+        
+        self.running = True
 
     def listen(self):
         while self.running:
             data, addr = self.socket.recvfrom(protocol.MAX_PACKET)
-            
             seq , ack, flag, payload = protocol.unpack_packet(data)
             
             if flag == protocol.FLAG_DATA:
@@ -28,7 +29,6 @@ class Receiver:
                 if seq == self.expect_seq:
                     self.store_to_buffer(payload)
                     self.expect_seq += 1
-                    
                 # Send ACK
                 ack_packet = protocol.pack_packet(0, self.expect_seq, protocol.FLAG_ACK, b"")
                 self.socket.sendto(ack_packet, addr)
@@ -54,15 +54,16 @@ class Receiver:
 def pipe_rcv_open():
     global next_receiver_id
     
-    r = Receiver(protocol.LOCAL_HOST, protocol.LOCAL_PORT, protocol.BUFFER_SIZE)
+    r = Receiver(protocol.LOCAL_HOST, protocol.LOCAL_PORT)
     
     t = threading.Thread(target=r.listen, daemon=True)
     t.start()
     
-    receivers[next_receiver_id] = r
+    receiver_id = next_receiver_id
+    receivers[receiver_id] = r
     next_receiver_id += 1
     
-    return
+    return receiver_id
 
 def pipe_read(pipe_id, size):
     r = receivers.get(pipe_id)
@@ -70,11 +71,8 @@ def pipe_read(pipe_id, size):
         return b""
     
     with r.data_available:
-        if len(r.buffer) == 0:
-            if r.closed or not r.running:
-                return b""
+        while len(r.buffer) == 0 and r.running:
             r.data_available.wait()
-            
         if len(r.buffer) == 0:
             return b""
 

@@ -10,6 +10,8 @@ FLAG_FIN  = 4
 LOCAL_HOST = "192.168.1.4"
 LOCAL_PORT = 20001
 
+TIMEOUT = 0.5
+
 # Header format:
 # SEQ  (4 bytes, unsigned int)
 # ACK  (4 bytes, unsigned int)
