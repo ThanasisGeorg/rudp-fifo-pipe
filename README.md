@@ -17,17 +17,18 @@ This project provides a software-level reliable communication channel over UDP, 
 
 ```
 rudp-fifo-pipe/
-├── main/
-│   ├── __init__.py
-│   ├── protocol.py
-│   ├── receiver/
-│   │   ├── receiver_main.py
-│   │   └── receiver.py
-│   └── sender/
-│       ├── sender_main.py
-│       └── sender.py
-├── tests/
-│   └── benchmark.py
+├── src/
+│   ├── main/
+│   │   ├── __init__.py
+│   │   ├── protocol.py
+│   │   ├── receiver/
+│   │   │   ├── receiver_main.py
+│   │   │   └── receiver.py
+│   │   └── sender/
+│   │       ├── sender_main.py
+│   │       └── sender.py
+│   └── tests/
+│       └── benchmark.py
 ├── statistics
 │   └── benchmark_results.md
 ├── LICENSE
