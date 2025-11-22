@@ -77,6 +77,15 @@ pipe_snd_close(sender_id)
 1. Always start the receiver before the sender to avoid lost packets.
 2. The sender and receiver buffers are configurable in protocol.py (default 25 KB).
 
+## Test
+
+Run the following code to run the benchmark:
+
+```bash
+cd src/tests
+python3 benchmark.py
+```
+
 ## License
 
 MIT License. See <a href="https://github.com/ThanasisGeorg/rudp-fifo-pipe/blob/main/LICENSE">LICENSE</a> file for details.
