@@ -1,7 +1,7 @@
 import socket
 import threading
 from xmlrpc import server
-import pipe.protocol as protocol
+import main.protocol as protocol
 
 next_receiver_id = 1
 receivers = {}
@@ -9,8 +9,8 @@ receivers = {}
 class Receiver:
     def __init__(self, local_host, local_port):
         self.socket = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
-        self.local = (local_host, local_port)
-        self.socket.bind(self.local)
+        self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        self.socket.bind( (local_host, local_port) )
         
         self.buffer = bytearray()
         self.lock = threading.Lock()
@@ -18,6 +18,11 @@ class Receiver:
         self.data_available = threading.Condition(self.lock)
         
         self.running = True
+        
+        # Statistics
+        self.duplicate_drops = 0
+        self.full_buffer_drops = 0
+
 
     def listen(self):
         while self.running:
@@ -29,14 +34,20 @@ class Receiver:
                 if seq == self.expect_seq:
                     self.store_to_buffer(payload)
                     self.expect_seq += 1
+                # Check for duplicate packet
+                if seq < self.expect_seq:
+                    self.duplicate_drops += 1
                 # Send ACK
                 ack_packet = protocol.pack_packet(0, self.expect_seq, protocol.FLAG_ACK, b"")
                 self.socket.sendto(ack_packet, addr)
             elif flag == protocol.FLAG_FIN:
                 self.running = False
                 final_ack_packet = protocol.pack_packet(0, self.expect_seq, protocol.FLAG_ACK, b"")
-                self.socket.sendto(final_ack_packet, addr)
-                
+                try:
+                    self.socket.sendto(final_ack_packet, addr)
+                except OSError:
+                    # socket closed while sending
+                    pass
                 with self.data_available:
                     self.data_available.notify_all()
             elif flag == protocol.FLAG_ACK:
@@ -47,6 +58,7 @@ class Receiver:
         with self.data_available:
             free_space = protocol.BUFFER_SIZE - len(self.buffer)
             if len(payload) > free_space:
+                self.full_buffer_drops += 1
                 payload = payload[:free_space]
             self.buffer.extend(payload)
             self.data_available.notify()
@@ -94,6 +106,6 @@ def pipe_rcv_close(pipe_id):
     r.socket.close()
     
     # Remove from receivers
-    del receivers[pipe_id]
+    #del receivers[pipe_id]
     
     return

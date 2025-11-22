@@ -1,7 +1,7 @@
 import threading
 import socket
 import time
-from pipe import protocol
+from main import protocol
 
 next_sender_id = 1
 senders = {}
@@ -9,6 +9,7 @@ senders = {}
 class Sender:
     def __init__(self, local_host, local_port, buffer_size):
         self.socket = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
+        self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         self.socket.bind( (local_host, local_port) )
         
         self.buffer = bytearray()
@@ -29,6 +30,11 @@ class Sender:
         self.listen_thread = threading.Thread(target=self.listen, daemon=True)
         self.listen_thread.start()
         
+        # Statistics
+        self.retransmissions = 0
+        self.flow_control_waits = 0
+
+        
     # Write payload to buffer
     def write_to_buffer(self, payload):
         with self.data_available:
@@ -36,6 +42,7 @@ class Sender:
             while i < len(payload):
                 while len(self.buffer) >= self.buffer_size:
                     self.space_available.wait()
+                    self.flow_control_waits += 1
                 self.buffer.append(payload[i])
                 i += 1
             self.data_available.notify()
@@ -66,11 +73,19 @@ class Sender:
         self.socket.settimeout(protocol.TIMEOUT)
         while self.running:
             try:
-                data, addr = self.socket.recvfrom(protocol.MAX_PACKET)    
+                data, addr = self.socket.recvfrom(protocol.MAX_PACKET)
             except socket.timeout:
                 if self.pending_packet is not None:
-                    self.socket.sendto(self.pending_packet, (protocol.LOCAL_HOST, protocol.LOCAL_PORT))
+                    try:
+                        self.socket.sendto(self.pending_packet, (protocol.LOCAL_HOST, protocol.LOCAL_PORT))
+                        self.retransmissions += 1
+                    except OSError:
+                        # socket closed while sending
+                        return
                 continue
+            except OSError:
+                # socket closed
+                return
             
             seq , ack, flag, payload = protocol.unpack_packet(data)
             if flag == protocol.FLAG_ACK:
@@ -91,14 +106,17 @@ class Sender:
     def close(self):
         self.flush()
         fin = protocol.pack_packet(self.pending_seq, 0, protocol.FLAG_FIN, b"")
-        self.socket.sendto(fin, (protocol.LOCAL_HOST, protocol.LOCAL_PORT))
+        try:
+            self.socket.sendto(fin, (protocol.LOCAL_HOST, protocol.LOCAL_PORT))
+        except OSError:
+            # socket closed while sending FIN
+            pass
         
         self.running = False
+        self.socket.close()        
         
         with self.data_available:
             self.data_available.notify_all()
-        
-        self.socket.close()        
 
 def pipe_snd_open():
     global next_sender_id
@@ -129,5 +147,5 @@ def pipe_snd_close(pipe_id):
     if s is None:
         return
     s.close()
-    del senders[pipe_id]
+    # del senders[pipe_id]
     return

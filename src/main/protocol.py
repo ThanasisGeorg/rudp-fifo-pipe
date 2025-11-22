@@ -1,7 +1,7 @@
 import struct
 
 MAX_PAYLOAD = 1024
-BUFFER_SIZE = 25 * MAX_PAYLOAD
+BUFFER_SIZE = 25 * 1024
 
 FLAG_DATA = 1
 FLAG_ACK  = 2
@@ -10,7 +10,7 @@ FLAG_FIN  = 4
 LOCAL_HOST = "192.168.1.4"
 LOCAL_PORT = 20001
 
-TIMEOUT = 0.5
+TIMEOUT = 0.01
 
 # Header format:
 # SEQ  (4 bytes, unsigned int)
@@ -23,6 +23,8 @@ HEADER_FORMAT = "!IIBH"
 HEADER_SIZE = struct.calcsize(HEADER_FORMAT)
 
 MAX_PACKET = MAX_PAYLOAD + HEADER_SIZE
+
+DATA_BLOCK = bytes([0x55] * 512)
 
 # Packeting functions
 def pack_packet(seq, ack, flag, payload: bytes):
