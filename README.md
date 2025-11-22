@@ -81,17 +81,15 @@ pipe_snd_close(sender_id)
 
 1. Open a terminal.
 
-2. Go to the root of the repo.
-
-3. Run the following:
+2. Go to the root of the repo and run the following:
 
 ```bash
 python3 src/main/receiver/receiver_main.py
 ```
 
-4. Open a second terminal.
+3. Open a second terminal.
 
-5. Run the following:
+4. Go to the root of the repo and run the following:
 
 ```bash
 cd rudp-fifo-pipe/
