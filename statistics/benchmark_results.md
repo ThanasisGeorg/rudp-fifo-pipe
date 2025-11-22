@@ -2,8 +2,6 @@
 
 Below are the results of the pipe implementation, sending/receiving a 512B block for different values of N. Each test was repeated 3 times.
 
----
-
 ## N = 10 (3 repetitions)
 
 | Run | Status |
@@ -21,8 +19,6 @@ Below are the results of the pipe implementation, sending/receiving a 512B block
 | Duplicates             | 10        | 10        | 10        |
 | Dropped (buffer full)  | 0         | 0         | 0         |
 | Flow-control waits     | 0         | 0         | 0         |
-
----
 
 ## N = 100 (3 repetitions)
 
@@ -42,8 +38,6 @@ Below are the results of the pipe implementation, sending/receiving a 512B block
 | Dropped (buffer full)  | 0         | 0         | 0         |
 | Flow-control waits     | 0         | 0         | 0         |
 
----
-
 ## N = 1000 (3 repetitions)
 
 | Run | Status |
@@ -62,8 +56,6 @@ Below are the results of the pipe implementation, sending/receiving a 512B block
 | Dropped (buffer full)  | 0          | 0          | 0          |
 | Flow-control waits     | 0          | 0          | 0          |
 
----
-
 ## N = 10000 (3 repetitions)
 
 | Run | Status |
@@ -81,8 +73,6 @@ Below are the results of the pipe implementation, sending/receiving a 512B block
 | Duplicates             | 10586      | 11590.667  | 12913      |
 | Dropped (buffer full)  | 0          | 0          | 0          |
 | Flow-control waits     | 0          | 0          | 0          |
-
----
 
 **Conclusions:**
 
