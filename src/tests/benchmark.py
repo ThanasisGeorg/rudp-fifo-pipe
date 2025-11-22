@@ -50,7 +50,7 @@ def print_stats(label, values):
     print(f"{label}: min={min(nums):.6f}, avg={statistics.mean(nums):.6f}, max={max(nums):.6f}")
 
 def main():
-    print("=== PIPE PERFORMANCE BENCHMARK ===\n")
+    print("=== PIPE PERFORMANCE BENCHMARK ===")
 
     for N in ITERATIONS:
         print(f"\n=======================")
