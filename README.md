@@ -15,6 +15,7 @@ This project provides a software-level reliable communication channel over UDP, 
 
 ## Project Structure
 
+```
 rudp-fifo-pipe/
 ├── main/
 │   ├── __init__.py
@@ -29,6 +30,7 @@ rudp-fifo-pipe/
 │   └── benchmark.py
 ├── LICENSE
 └── README.md
+```
 
 ## Installation
 
