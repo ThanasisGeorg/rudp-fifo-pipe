@@ -18,7 +18,7 @@ This project provides a software-level reliable communication channel over UDP, 
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/ThanasisGeorg/rudp-fifo-pipe.git
+git clone git@github.com:ThanasisGeorg/rudp-fifo-pipe.git
 cd rudp-fifo-pipe/
 ```
 
