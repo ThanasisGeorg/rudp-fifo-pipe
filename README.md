@@ -3,8 +3,6 @@
 A **reliable UDP (RUDP) FIFO pipe** implementation in Python.  
 This project provides a software-level reliable communication channel over UDP, using sequence numbers, acknowledgements (ACKs), retransmissions, and flow control, with a first-in-first-out (FIFO) buffer for sender and receiver.
 
----
-
 ## Features
 
 - Reliable data transfer over UDP.
@@ -15,25 +13,21 @@ This project provides a software-level reliable communication channel over UDP, 
 - Blocking `write` and `read` operations respecting buffer capacity.
 - Benchmarking scripts for performance evaluation.
 
----
-
 ## Project Structure
 
 rudp-fifo-pipe/
 ├── main/
-│ ├── **init**.py
-│ ├── protocol.py
-| ├── receiver/
-│   ├── receiver_main.py
-|   └── receiver.py
-| └── sender/
-|   ├── sender_main.py
-│   └── sender.py
+│   ├── __init__.py
+│   ├── protocol.py
+│   ├── receiver/
+│   │   ├── receiver_main.py
+│   │   └── receiver.py
+│   └── sender/
+│       ├── sender_main.py
+│       └── sender.py
 ├── tests/
-│ └── benchmark.py
+│   └── benchmark.py
 └── README.md
-
----
 
 ## Installation
 
