@@ -28,6 +28,8 @@ rudp-fifo-pipe/
 │       └── sender.py
 ├── tests/
 │   └── benchmark.py
+├── statistics
+│   └── benchmark_results.md
 ├── LICENSE
 └── README.md
 ```
@@ -49,7 +51,7 @@ cd rudp-fifo-pipe
 
 Initalize the receiver first:
 
-```bash
+```python
 from pipe.receiver.receiver import pipe_rcv_open, pipe_read, pipe_rcv_close
 
 receiver_id = pipe_rcv_open()
@@ -61,7 +63,7 @@ pipe_rcv_close(receiver_id)
 
 Then initialize the sender:
 
-```bash
+```python
 from pipe.sender.sender import pipe_snd_open, pipe_write, pipe_snd_close
 
 sender_id = pipe_snd_open()
