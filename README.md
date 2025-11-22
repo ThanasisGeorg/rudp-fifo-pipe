@@ -13,28 +13,6 @@ This project provides a software-level reliable communication channel over UDP, 
 - Blocking `write` and `read` operations respecting buffer capacity.
 - Benchmarking scripts for performance evaluation.
 
-## Project Structure
-
-```
-rudp-fifo-pipe/
-├── src/
-│   ├── main/
-│   │   ├── __init__.py
-│   │   ├── protocol.py
-│   │   ├── receiver/
-│   │   │   ├── receiver_main.py
-│   │   │   └── receiver.py
-│   │   └── sender/
-│   │       ├── sender_main.py
-│   │       └── sender.py
-│   └── tests/
-│       └── benchmark.py
-├── statistics
-│   └── benchmark_results.md
-├── LICENSE
-└── README.md
-```
-
 ## Installation
 
 1. Clone the repository:
@@ -74,13 +52,12 @@ pipe_snd_close(sender_id)
 
 ### Notes
 
-1. Always start the receiver before the sender to avoid lost packets.
-2. The sender and receiver buffers are configurable in protocol.py (default 25 KB).
+- Always start the receiver before the sender to avoid lost packets.
+- The sender and receiver buffers are configurable in protocol.py (default 25 KB).
 
 ## Test
 
 1. Open a terminal.
-
 2. Go to the root of the repo and run the following:
 
 ```bash
@@ -88,7 +65,6 @@ python3 src/main/receiver/receiver_main.py
 ```
 
 3. Open a second terminal.
-
 4. Go to the root of the repo and run the following:
 
 ```bash
