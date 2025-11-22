@@ -92,7 +92,6 @@ python3 src/main/receiver/receiver_main.py
 4. Go to the root of the repo and run the following:
 
 ```bash
-cd rudp-fifo-pipe/
 python3 src/main/sender/sender_main.py
 ```
 
