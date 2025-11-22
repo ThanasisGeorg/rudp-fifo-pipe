@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-`RUDP FIFO pipe` is a Python project implementing a **reliable, FIFO-ordered data transfer protocol** on top of UDP. The project provides a **Sender** and **Receiver** abstraction, enabling users to transmit fixed-size data blocks reliably over an unreliable network.
+`rudp-fifo-pipe` is a Python project implementing a **reliable, FIFO-ordered data transfer protocol** on top of UDP. The project provides a **Sender** and **Receiver** abstraction, enabling users to transmit fixed-size data blocks reliably over an unreliable network.
 
 The project simulates a simple **RUDP (Reliable UDP)** pipe with flow control, retransmissions, and duplicate packet handling.
 
