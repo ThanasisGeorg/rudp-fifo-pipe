@@ -41,7 +41,7 @@ rudp-fifo-pipe/
 
 ```bash
 git clone https://github.com/ThanasisGeorg/rudp-fifo-pipe.git
-cd rudp-fifo-pipe
+cd rudp-fifo-pipe/
 ```
 
 2. Ensure Python 3.8+ is installed.
@@ -79,10 +79,31 @@ pipe_snd_close(sender_id)
 
 ## Test
 
+1. Open a terminal.
+
+2. Go to the root of the repo.
+
+3. Run the following:
+
+```bash
+python3 src/main/receiver/receiver_main.py
+```
+
+4. Open a second terminal.
+
+5. Run the following:
+
+```bash
+cd rudp-fifo-pipe/
+python3 src/main/sender/sender_main.py
+```
+
+## Benchmark
+
 Run the following code to run the benchmark:
 
 ```bash
-cd src/tests
+cd src/tests/
 python3 benchmark.py
 ```
 

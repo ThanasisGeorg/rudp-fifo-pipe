@@ -16,7 +16,7 @@ def main():
 
     time.sleep(1)
     pipe_snd_close(snd_id)
-    print("Sender closed.")
+    print("\nSender closed.")
 
 if __name__ == "__main__":
     main()
