@@ -27,6 +27,7 @@ rudp-fifo-pipe/
 │       └── sender.py
 ├── tests/
 │   └── benchmark.py
+├── LICENSE
 └── README.md
 
 ## Installation
